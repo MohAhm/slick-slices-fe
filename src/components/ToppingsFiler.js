@@ -73,11 +73,10 @@ export default function ToppingsFiler() {
     }
   `);
 
-  console.clear();
+  // console.clear();
   // console.log({ toppings, pizzas });
 
   const toppingsWithCounts = countPizzaInToppings(pizzas.nodes);
-  console.log(toppingsWithCounts);
 
   return (
     <ToppingsStyles>
