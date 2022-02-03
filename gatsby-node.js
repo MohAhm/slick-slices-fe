@@ -27,6 +27,35 @@ async function turnPizzasIntoPages({ graphql, actions }) {
   });
 }
 
+async function turnToppingsIntoPages({ graphql, actions }) {
+  const toppingsTemplate = path.resolve('./src/pages/pizzas.js');
+
+  const { data } = await graphql(`
+    query {
+      toppings: allSanityTopping {
+        nodes {
+          id
+          name
+        }
+      }
+    }
+  `);
+
+  data.toppings.nodes.forEach((topping) => {
+    actions.createPage({
+      path: `topping/${topping.name}`,
+      component: toppingsTemplate,
+      context: {
+        topping: topping.name,
+        toppingRegex: `/${topping.name}/i`,
+      },
+    });
+  });
+}
+
 export async function createPages(params) {
-  await turnPizzasIntoPages(params);
+  await Promise.all([
+    await turnPizzasIntoPages(params),
+    await turnToppingsIntoPages(params),
+  ]);
 }
