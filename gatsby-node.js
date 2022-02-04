@@ -1,4 +1,5 @@
 import path from 'path';
+import fetch from 'isomorphic-fetch';
 
 async function turnPizzasIntoPages({ graphql, actions }) {
   const pizzaTemplate = path.resolve('./src/templates/Pizza.js');
@@ -51,6 +52,37 @@ async function turnToppingsIntoPages({ graphql, actions }) {
       },
     });
   });
+}
+
+async function fetchCoffeeAndTurnIntoNodes({
+  actions,
+  createNodeId,
+  createContentDigest,
+}) {
+  const res = await fetch('https://api.sampleapis.com/coffee/hot');
+  const allCoffee = await res.json();
+
+  for (const coffee of allCoffee) {
+    const nodeMeta = {
+      id: createNodeId(coffee.id),
+      parent: null,
+      children: [],
+      internal: {
+        type: 'Coffee',
+        mediaType: 'application/json',
+        contentDigest: createContentDigest(coffee),
+      },
+    };
+
+    actions.createNode({
+      ...coffee,
+      ...nodeMeta,
+    });
+  }
+}
+
+export async function sourceNodes(params) {
+  await Promise.all([fetchCoffeeAndTurnIntoNodes(params)]);
 }
 
 export async function createPages(params) {
