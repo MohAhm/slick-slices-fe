@@ -1,6 +1,7 @@
 import { graphql } from 'gatsby';
 import React from 'react';
 import styled from 'styled-components';
+import SEO from '../components/SEO';
 
 const CoffeeStyles = styled.div`
   padding: 2rem 0;
@@ -23,6 +24,7 @@ export const query = graphql`
 export default function CoffeePage({ data }) {
   return (
     <>
+      <SEO title={`Coffee! We have ${data.coffee.nodes.length} in stock`} />
       <h2 className="center">
         We have {data.coffee.nodes.length} Coffee available.
       </h2>

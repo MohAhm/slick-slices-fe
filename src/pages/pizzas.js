@@ -1,6 +1,7 @@
 import { graphql } from 'gatsby';
 import React from 'react';
 import PizzaList from '../components/PizzaList';
+import SEO from '../components/SEO';
 import ToppingsFiler from '../components/ToppingsFiler';
 
 export const query = graphql`
@@ -35,6 +36,13 @@ export default function PizzasPage({ data, pageContext }) {
 
   return (
     <>
+      <SEO
+        title={
+          pageContext.topping
+            ? `Pizzas With ${pageContext.topping}`
+            : 'All Pizzas'
+        }
+      />
       <ToppingsFiler activeTopping={pageContext.topping} />
       <PizzaList pizzas={pizzas} />
     </>
